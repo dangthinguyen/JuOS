@@ -1,0 +1,600 @@
+SCREEN 1024,768
+SetWindow "JuOs",0,"Are you sure?"
+lsnumber=Len (GetEXEName ())-Len ("JuOs.exe")
+ls$=Left (GetEXEName(), lsnumber)
+ChDir ls$
+REMSTART
+         .iii.   usola
+         .iii.
+         .iii.
+         .iii.
+         .iii.
+         .iii.
+        .iii.
+.ii.   .iii.
+   .iiii.
+
+Project Info:
+Name: JuOs
+Idea: a New operating system
+Current version: 0.01
+Creator: Juuso Laine
+REMEND
+'Functions
+
+Function nappi(x,y,txt$="")
+   width      = TextWidth(txt)+6
+   height      = TextHeight(txt)+6
+   result      = False
+   mouse_over   = False
+   Color cbWhite
+   Box x,y, width,height, OFF 
+   If MouseX()>=x And MouseX()<=x+width-3 Then
+      If MouseY()>=y And MouseY()<=y+height-3 Then
+         mouse_over = True
+         If MouseHit(1) Then result = True
+      EndIf
+   EndIf
+   If mouse_over=True Then 
+   c = 128+mouse_over*50
+   Color c,c,c
+   Box x,y, width,height, ON
+   Color 255,255,255
+   EndIf 
+   CenterText x+width/2,y+height/2, txt, 2
+   Return result
+EndFunction 
+Function nappi2(x,y,txt$="")
+   width      = TextWidth(txt)+6
+   height      = TextHeight(txt)+6
+   result      = False
+   mouse_over   = False
+   Color cbWhite
+   Box x,y, width,height, OFF 
+   If MouseX()>=x And MouseX()<=x+width-3 Then
+      If MouseY()>=y And MouseY()<=y+height-3 Then
+         mouse_over = True
+         If MouseHit(1) Then result = True
+      EndIf
+   EndIf
+   If mouse_over=True Then 
+   c = 128+mouse_over*50
+   Color c,c,c
+   Box x,y, width,height, ON
+   Color 255,255,255
+   EndIf 
+   CenterText x+width/2,y+height/2, txt, 2
+   Return result
+EndFunction 
+
+Function kuvanappi(kuvax,kuvay,kuvanam)
+kuvax2=kuvax+ImageWidth (kuvanam)
+kuvay2=kuvay+ImageHeight (kuvanam)
+DrawImage kuvanam,kuvax,kuvay
+     
+    If MouseHit(1) And MouseX()>kuvax And MouseX()<kuvax2 And MouseY()>kuvay And MouseY()<kuvay2 Then Return ""1
+EndFunction 
+Function kuvanappi2(kuvax,kuvay,kuvanam)
+kuvax2=kuvax+ImageWidth (kuvanam)
+kuvay2=kuvay+ImageHeight (kuvanam)
+
+     
+    If MouseHit(1) And MouseX()>kuvax And MouseX()<kuvax2 And MouseY()>kuvay And MouseY()<kuvay2 Then Return ""1
+EndFunction 
+
+Function runcommand(ctr$="")
+If ctr$="resetpassword" Then Print "Usage: newpassword" : Print "This resets password of "+user1namestring$+"." 
+If CountWords (ctr$)=2 Then 
+If GetWord (ctr$, 1)="resetpassword" Then
+If GetWord (ctr$, 1)="resetpassword" Then user1passfile=OpenToEdit ("Files\user1\pass.txt") : WriteLine user1passfile, GetWord (ctr$, 3) : CloseFile user1passfile 
+Print "Password of user1 changed"
+Print "Press any key to continue"
+WaitKey 
+Return "" 
+EndIf 
+EndIf 
+If ctr$="help" Then Print "Full list of commands:" : Print "resetpassword" : Print "help" : Print "reset" : Print "Type command for usage" : Print "Press any key to continue" :WaitKey : Return "" 
+If ctr$="reset" Then Print "CAUTION: RESETS THE JUOS FULLY. Type reset -r to RESET JUOS FULLY!!!": Print "THIS COMMAND IS NOT NEEDED IF YOU ARE AN NORMAL USER!!! press any key to continue (this doesnt reset juos)." : WaitKey : Return ""
+If ctr$="reset -r" Then juosresetfile1=OpenToEdit("Files\pub\isnew.txt") : WriteLine juosresetfile1, "" : CloseFile juosresetfile1 : juosresetfile2=OpenToEdit ("Files\user2\show.txt") : WriteLine juosresetfile2, "" :CloseFile juosresetfile2 : Print "Juos now resetted": Print "Finish resetting by restarting juos" : Print "Press any key to end juos" : WaitKey : Return ""
+
+WaitKey 
+EndFunction 
+
+'loading
+loading:
+Dim ei As Float
+
+FrameLimit 20 'limit game speed
+
+ClsColor cbwhite 'background to white
+'Load images and other files:
+
+randtime=Rand(100,50000)
+'Load images and other files:^
+Repeat
+
+    angle=WrapAngle(angle+10) 'increase angle
+
+    'draw dots
+    ei=0
+    For eii= angle To angle-90 Step -1
+        Color e,ei,ei
+        ei=ei+2.8
+        times+1
+        Dot 512+Cos(eii)*10,768/2-Sin(eii)*10
+        If times=>randtime Then goto outloading
+    Next eii
+
+    'print some info
+  
+    
+    'draw the center
+   
+    DrawScreen
+
+Forever 
+outloading:
+ClsColor cbblack
+Color cbwhite
+confisnew=OpenToEdit ("Files\pub\isnew.txt")
+If ReadLine (confisnew)="" Then 
+WriteLine confisnew, "1"
+CloseFile confisnew
+goto firsttime
+EndIf
+goto users 
+'Loading complete
+'Select user
+users:
+Wait 200
+user1namefile=OpenToRead ("Files\user1\name.txt")
+user1namestring$=ReadLine (user1namefile)
+CloseFile user1namefile
+user1passfile=OpenToRead ("Files\user1\pass.txt")
+user1passstring$= ReadLine (user1passfile)
+CloseFile user1passfile
+user1showfile=OpenToRead ("Files\user1\show.txt")
+user1shownum=ReadLine (user1showfile)
+CloseFile user1showfile
+user1showbackgroundfile=OpenToEdit ("Files\user1\showbackground.txt")
+user1showbackgroundnum$=ReadLine (user1showbackgroundfile)
+
+CloseFile user1showbackgroundfile
+user1backgroundimage=LoadImage ("Files\user1\background.jpg")
+user2namefile=OpenToEdit ("Files\user2\name.txt")
+user2namestring$=ReadLine (user2namefile)
+CloseFile user2namefile
+user2passfile=OpenToEdit ("Files\user2\pass.txt")
+user2passstring$= ReadLine (user2passfile)
+CloseFile user2passfile
+user2showfile=OpenToEdit ("Files\user2\show.txt")
+user2shownum=ReadLine (user2showfile)
+CloseFile user2showfile
+CloseInput 
+Repeat 
+
+
+Text 5,5,"Login"
+DrawScreen 
+If KeyDown (29) And KeyDown (29) Then goto terminal
+If user1shownum="1" Then 
+If nappi(10,40,user1namestring$) Then goto user1
+EndIf 
+If user2shownum="1" Then 
+If nappi(10,60,user2namestring$) Then goto user2
+EndIf 
+If nappi (950,700,"Exit") Then End 
+If user2shownum="" Or user2shownum="0" Then
+If nappi(1,700,"Create new user") Then goto usersetupuser2step1
+EndIf  
+ Forever 
+user1:
+Wait 200
+'user 1 login
+If Not user1passstring$="" Then 
+Repeat 
+Text 5,5,"Login"
+Text 1024/2-120,768/2-6,"Password:"
+Box 1024/2-50,768/2-7,100,14,0
+DrawScreen 
+If nappi(930,700,"Back to users") Then goto users 
+Locate 1024/2-45,768/2-6
+user1passinput$=Input ("","*")
+If nappi(1024/2+60,768/2-6,"Login") Then 
+If  user1passinput$=user1passstring$ Then 
+CloseInput 
+Exit 
+Else 
+CloseInput 
+For wrongpasswduser1text= 1 To 100
+Text 5,5,"Wrong password"
+DrawScreen
+Next wrongpasswduser1text
+user1passinput$=""
+Goto user1
+EndIf 
+EndIf 
+Forever
+EndIf  
+
+'User 1 desktop
+user1desktop:
+Wait 200
+ClearMouse 
+Repeat 
+If user1showbackgroundnum$="1" Then
+
+ DrawImage user1backgroundimage, 0,0
+ EndIf 
+ Text 5,500,"This application is not yet finished..."
+ If nappi(960,700,"Log out") Then goto users
+ If nappi(5,5,"Games") Then goto user1games
+ If nappi(5,25,"Apps") Then goto user1apps
+ DrawScreen 
+ Forever 
+
+'User 1 games
+user1games:
+SetWindow "JuOs",0,"Are you sure?"
+ClearMouse 
+Wait 200
+ClearMouse 
+Repeat 
+If user1showbackgroundnum$="1" Then
+ DrawImage user1backgroundimage, 0,0
+ EndIf
+Text 5,5,"Games"
+If nappi(960,700,"Go Back") Then goto user1desktop
+If nappi(5,5,"City Build") Then 
+Include "Files\user1\games\city build\city build.cb"
+DrawScreen
+EndIf  
+Forever 
+'user 1 apps
+user1apps:
+Wait 200
+Repeat 
+If user1showbackgroundnum$="1" Then
+ DrawImage user1backgroundimage, 0,0
+ EndIf
+ If nappi (960,700,"Go back") Then goto user1desktop
+ //If nappi (5,5,"Calculator") Then goto user1calculator
+ If nappi (5,25,"Settings") Then goto user1settings
+ DrawScreen
+ Forever 
+user1settings:
+Wait 200
+ClearMouse 
+Repeat 
+If nappi(950,700,"Go back") Then goto user1desktop
+If user1showbackgroundnum$="1" Then
+ DrawImage user1backgroundimage, 0,0
+ EndIf
+If user1showbackgroundnum$="1" Then
+user1backgroundtext$="ON"
+Else 
+user1backgroundtext$="OFF"
+
+EndIf 
+If nappi(5,5,"Background: "+user1backgroundtext$) Then 
+If user1showbackgroundnum$="1" Then
+user1showbackgroundfile=OpenToEdit ("Files\user1\showbackground.txt")
+WriteLine user1showbackgroundfile, "0"
+CloseFile user1showbackgroundfile
+ For startagain = 1 To 100
+ Text 5,5,"The app will close to take effect please start it again..."
+DrawScreen 
+Next startagain
+End 
+Else 
+user1showbackgroundfile=OpenToEdit ("Files\user1\showbackground.txt")
+WriteLine user1showbackgroundfile, "1"
+CloseFile user1showbackgroundfile
+For startagain = 1 To 100
+ Text 5,5,"The app will close to take effect please start it again..."
+DrawScreen 
+Next startagain
+End 
+EndIf 
+EndIf 
+If nappi(5,25,"Change background") Then 
+Repeat 
+Text 512-TextWidth ("Put the background To "+ls$+"Files\user1\background.jpg And restart the app.")/2,768/2,"Put the background to "+ls$+"Files\user1\background.jpg and restart the app."
+If nappi(950,700,"Go back") Then goto user1settings
+DrawScreen
+Forever 
+EndIf 
+DrawScreen 
+If nappi(5,25+20,"Manage users") Then
+Wait 200
+Repeat 
+DrawScreen 
+If nappi(950,700,"Go back") Then goto user1settings
+If nappi(5,5,"Delete "+user2namestring$)Then
+Repeat 
+If nappi(5,25,"No")Then goto user1settings
+If nappi(5,5,"Yes")Then 
+ 
+user2deletegamefile=OpenToEdit ("Files\user2\games\city build\game.dat")
+WriteLine user2deletegamefile, ""
+CloseFile user2deletegamefile
+user2showfilefile=OpenToEdit ("Files\user2\show.txt")
+WriteLine user2showfile,"0"
+CloseFile user2showfile
+For thetextloop = 1 To 100
+Text 5,5,"Done"
+DrawScreen
+Next  thetextloop
+goto user1settings
+EndIf
+Forever 
+EndIf   
+DrawScreen 
+Forever
+DrawScreen 
+EndIf 
+Forever 
+
+
+'user2 login
+user2:
+Wait 200
+If Not user2passstring$="" Then 
+Repeat 
+Text 5,5,"Login"
+Text 1024/2-120,768/2-6,"Password:"
+Box 1024/2-50,768/2-7,100,14,0
+DrawScreen 
+If nappi(930,700,"Back to users") Then goto users 
+Locate 1024/2-45,768/2-6
+user2passinput$=Input ("","*")
+If nappi(1024/2+60,768/2-6,"Login") Then 
+If  user2passinput$=user2passstring$ Then 
+CloseInput 
+Exit 
+Else 
+CloseInput 
+For wrongpasswduser2text= 1 To 100
+Text 5,5,"Wrong password"
+DrawScreen
+Next wrongpasswduser2text
+user2passinput$=""
+Goto user2
+EndIf 
+EndIf 
+Forever
+EndIf  
+
+'User 2 desktop
+user2desktop:
+Wait 200
+ Repeat 
+ Text 5,5,"This application is not yet finished..."
+ If nappi(960,700,"Log out") Then goto users
+ If nappi(1,700,"Games") Then goto user2games
+ DrawScreen 
+ Forever 
+
+'User 2 games
+user2games:
+SetWindow "JuOs",0,"Are you sure?"
+Wait 200
+Repeat 
+DrawScreen 
+Text 5,5,"Games"
+If nappi(960,700,"Go Back") Then goto user2desktop
+If nappi(1,700,"City Build") Then 
+Include "Files\user2\games\city build\city build.cb"
+DrawScreen
+Wait 5000
+EndIf  
+Forever 
+'user 2 apps
+user2apps:
+
+
+
+user3:
+'user 3 desktop and login
+End 
+
+
+
+
+user4:
+'User4 desktop and login
+End 
+
+
+
+
+
+
+
+
+firsttime:
+Repeat 
+Text 512,768/2,"Welcome to JuOs!"
+If nappi(512,768/2+20,"Continue") Then Goto firsttimepart2
+DrawScreen
+Forever
+firsttimepart2:
+Repeat 
+Text 5,5,"Setup your account:"
+Text 1024/2-115,768/2-6,"Username:"
+Box 1024/2-50,768/2-7,100,14,0
+DrawScreen 
+If MouseX()=>1024/2-50 And MouseX()=< 1024/2+50 And MouseY()=>768/2-7 And MouseY()=<768/2+7 And MouseDown (1) Then
+Repeat 
+Text 5,5,"Setup your account:"
+Text 1024/2-115,768/2-6,"Username:"
+Box 1024/2-50,768/2-7,100,14,0
+ 
+
+Locate 1024/2-40,768/2-6
+user1nameinput$=Input ("")
+DrawScreen 
+ If nappi(970,700,"Next") Then
+ user1showfile=OpenToEdit ("Files\user1\show.txt")
+ WriteLine user1showfile, "1"
+ CloseFile user1showfile
+ user1namefile=OpenToEdit ("Files\user1\name.txt")
+ WriteLine user1namefile, user1nameinput$ 
+ CloseFile user1namefile
+ CloseInput
+Goto firsttimepart3
+EndIf 
+Forever
+EndIf 
+Forever 
+firsttimepart3:
+Repeat 
+Text 5,5,"Setup your account:"
+Text 1024/2-120,768/2-6,"Password*:"
+Text 1024/2-100,768/2+15,"*Leave as blank if no password."
+Box 1024/2-50,768/2-7,100,14,0
+DrawScreen 
+If nappi(970,700,"Next") Then 
+user1passfile=OpenToEdit ("Files\user1\pass.txt")
+CloseFile user1passfile
+goto firsttimepart4
+EndIf  
+
+If MouseX()=>1024/2-50 And MouseX()=< 1024/2+50 And MouseY()=>768/2-7 And MouseY()=<768/2+7 And MouseDown (1) Then
+Repeat 
+Text 5,5,"Setup your account:"
+Text 1024/2-120,768/2-6,"Password*:"
+Box 1024/2-50,768/2-7,100,14,0
+Text 1024/2-100,768/2+20,"*Leave as blank if no password." 
+
+Locate 1024/2-45,768/2-6
+user1passinput$=Input ("","*")
+DrawScreen 
+ If nappi(970,700,"Next") Then 
+ user1passfile=OpenToEdit ("Files\user1\pass.txt")
+ WriteLine user1passfile,user1passinput$
+ CloseFile user1passfile
+ goto firsttimepart4
+ CloseInput 
+ EndIf 
+Forever
+EndIf 
+Forever 
+firsttimepart4:
+CloseInput
+Repeat 
+Text 1024/2-TextWidth ("Setup complete")/2,768/2,"Setup complete"
+If nappi(1024/2,768/2+15,"Users") Then goto users
+DrawScreen 
+Forever
+
+
+'Add user 2 
+usersetupuser2step1:
+Repeat 
+Text 5,5,"Setup your account:"
+Text 1024/2-115,768/2-6,"Username:"
+Box 1024/2-50,768/2-7,100,14,0
+DrawScreen 
+If MouseX()=>1024/2-50 And MouseX()=< 1024/2+50 And MouseY()=>768/2-7 And MouseY()=<768/2+7 And MouseDown (1) Then
+Repeat 
+Text 5,5,"Setup your account:"
+Text 1024/2-115,768/2-6,"Username:"
+Box 1024/2-50,768/2-7,100,14,0
+ 
+
+Locate 1024/2-40,768/2-6
+user2nameinput$=Input ("")
+DrawScreen 
+ If nappi(970,700,"Next") Then
+ user2showfile=OpenToEdit ("Files\user2\show.txt")
+ WriteLine user2showfile, "1"
+ CloseFile user2showfile
+ user2namefile=OpenToEdit ("Files\user2\name.txt")
+ WriteLine user2namefile, user2nameinput$ 
+ CloseFile user2namefile
+ CloseInput
+goto usersetupuser2step2
+EndIf 
+Forever
+EndIf 
+Forever 
+usersetupuser2step2:
+Repeat 
+Text 5,5,"Setup your account:"
+Text 1024/2-120,768/2-6,"Password*:"
+Text 1024/2-100,768/2+15,"*Leave as blank if no password."
+Box 1024/2-50,768/2-7,100,14,0
+DrawScreen 
+If nappi(970,700,"Next") Then 
+user2passfile=OpenToEdit ("Files\user2\pass.txt")
+CloseFile user2passfile
+goto usersetupfinish
+EndIf 
+
+If MouseX()=>1024/2-50 And MouseX()=< 1024/2+50 And MouseY()=>768/2-7 And MouseY()=<768/2+7 And MouseDown (1) Then
+Repeat 
+Text 5,5,"Setup your account:"
+Text 1024/2-120,768/2-6,"Password*:"
+Box 1024/2-50,768/2-7,100,14,0
+Text 1024/2-100,768/2+20,"*Leave as blank if no password." 
+
+Locate 1024/2-45,768/2-6
+user2passinput$=Input ("","*")
+DrawScreen 
+ If nappi(970,700,"Next") Then 
+ user2passfile=OpenToEdit ("Files\user2\pass.txt")
+ WriteLine user2passfile,user2passinput$
+ CloseFile user2passfile
+ goto usersetupfinish
+ CloseInput
+EndIf 
+Forever
+EndIf 
+Forever 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+usersetupfinish:
+
+CloseInput
+Repeat 
+Text 1024/2-TextWidth ("Setup complete")/2,768/2,"Setup complete"
+If nappi(1024/2,768/2+15,"Users") Then Goto users
+DrawScreen 
+Forever 
+ terminal:
+ Wait 200
+ AddText  ("You are now in terminal")
+ Wait 10
+ Locate 5,TextHeight ("something")+1
+ AddText ("Press ctrl+T in login screen if you want again to terminal")
+ Wait 10 
+ Locate 5,TextHeight ("SomeString")+TextHeight ("Somestring")+2
+ Repeat
+ DrawScreen 
+ terminal$=Input ("root@JuOs-$")
+ If KeyHit (cbkeyReturn) Then Print runcommand(terminal$)
+ If terminal$="exit" Then ClearText : Goto users
+ Forever 
+ 
+ 

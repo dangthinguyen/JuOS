@@ -1,0 +1,1691 @@
+lsnumber=Len (GetEXEName ())-Len ("JuOs.exe")
+ls$=Left (GetEXEName(), lsnumber)+"Files\user1\games\city build"+"\"
+versioncode$="1.17"
+ShowMouse ON   
+If GFXModeExists(640,480,16) Then
+   
+    SCREEN 640,480,16
+
+  
+EndIf
+
+If GFXModeExists(1024,768,32) Then
+
+    SCREEN 1024,768,32
+
+    
+EndIf
+If GFXModeExists (1600,900,32)Then SCREEN 1600,900
+If GFXModeExists (1920,1080,32)Then SCREEN 1920,1080
+If GFXModeExists (1280,720,32)Then SCREEN 1920,1080
+If GFXModeExists (1366,768,32)Then SCREEN 1366,768
+If GFXModeExists (2560,1600,32)Then SCREEN 1920,1080
+If GFXModeExists(2000,2000,8) Then
+   
+    SCREEN 2000,2000,8
+
+    
+EndIf
+SetWindow "City build",0,"Are you sure? This closes the JuOs also. I don't know works the autosave function. Use the game red x when you want to exit and save game."  
+ShowMouse ON
+If FileExists (ls$+"game.dat")=0 Then
+ntnt=xp=02000
+level=1
+
+xpnew=50
+cookie=10
+table=5
+car=3
+money=1000
+passenger=10
+tickets=3
+Gosub savegame
+EndIf 
+Gosub loadgame 
+minemap=LoadImage (ls$+"miningmap.bmp")
+background2=LoadImage (ls$+"background2.bmp")
+gomap=LoadImage (ls$+"goto.bmp")
+suljenappi=LoadImage  (ls$+"suljenappi.bmp")
+back=LoadImage (ls$+"background.bmp")
+background=LoadImage (ls$+"latauscitybuild.bmp")
+boatmap=LoadImage   (ls$+"boatmap.bmp")
+valikkonappi=LoadImage (ls$+"valikkonappi.bmp") 
+latausjusoft=LoadImage (ls$+"latausjugames.bmp")
+latauscoociecollect=LoadImage (ls$+"latauscitybuild.bmp")
+xpim=LoadImage (ls$+"xp.bmp")
+xpbox=LoadImage (ls$+"xpbox.bmp")
+tasks=LoadImage (ls$+"task.bmp")
+
+For latausjusoftsekuntionsekunti=0 To 100
+DrawImage latausjusoft,0,0
+DrawScreen 
+Wait 10
+Next latausjusoftsekuntionsekunti
+For latauscoociecollectsekuntionsekunti=0 To 100
+DrawImage latauscoociecollect,0,0
+DrawScreen
+Wait 10 
+Next latauscoociecollectsekuntionsekunti
+
+Dim s As Float
+'limit game speed
+'background to white
+rndt=Rand (01,999)
+kt=900
+tt=124/2
+Repeat
+Exit 
+l=l+2
+    angle=WrapAngle(angle+2) 
+    angle2=WrapAngle(angle2+2)'increase angle
+
+If l=>kt Then
+tt=l
+
+ EndIf 
+DrawImage latauscoociecollect,0,0
+ 
+DrawGame 
+tt+1 
+ Line 124/2,519,1024-124/2,519
+   
+    Line 124/2,519,tt,519
+    Line 124/2,523,tt,523
+    Line 124/2,524,tt,524
+    Line 124/2,525,tt,525
+    Line 124/2,526,tt,526
+   
+   Line 124/2,527,tt,527
+    Line 124/2,522,tt,522
+    Line 124/2,528,tt,528
+    Line 124/2,521,tt,521
+    Line 124/2,529,tt,529
+    Line 124/2,530,tt,530
+    Line 124/2,520,tt,520
+    Line 124/2,532,1024-124/2,532
+    Line 124/2,531,tt,531
+    Line 1024-124/2,519,1024-124/2,531
+Line 124/2,519,124/2,531
+    'draw dots
+     
+    s=0
+    For f= angle To angle-90 Step -1
+       Color cbwhite
+        
+        
+        Dot 512+Cos(i)*30,334-Sin(i)*30
+    Next f
+
+    'print some info
+    
+    
+    'draw the center
+ 
+    
+    DrawScreen
+
+Forever
+Gosub loadgame
+
+silmukkafloor:
+Wait 200
+Gosub savegame 
+paasilmukka:
+
+Repeat 
+ClsColor 0,255,0
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+exeretime+1
+If exeretime=>9999 Then
+    
+Gosub silmukkafloor
+EndIf 
+DrawImage back ,0,0
+If boatdeparture=1 And boatcomplete=>10000 Then
+boatmovednumber=1
+Gosub boatfm
+EndIf 
+UpdateGame 
+DrawGame 
+Text 864,27,money
+Text 751,27,cookie
+Text 953,27,tickets
+Text 869,73,car
+Text 957,73,table
+Text 952,107,passenger
+If kuvanappi2(10,5,valikkonappi) Then ClsColor 0,0,0 : Gosub valikko
+If kuvanappi(10+ImageWidth(valikkonappi) ,5,suljenappi) Then ClsColor 0,0,0 : Gosub saveexit
+If kuvanappi( 10,5+ImageHeight (valikkonappi), gomap) Then Gosub back2flo
+If kuvanappi(60,60,tasks) Then ClsColor 0,0,0 : Gosub tasks
+Gosub xpup
+DrawImage gomap,10,5+ImageHeight (valikkonappi)
+DrawScreen 
+Color cbWhite
+my=MouseY()
+mx=MouseX()
+If MouseHit (1)And my=>ImageHeight (valikkonappi) And my=<ImageHeight (valikkonappi)+ImageHeight (gomap)  And mx=>10 And mx=<10+ImageHeight (gomap) Then 
+Gosub back2flo
+EndIf 
+
+
+If portim<10000 Then portim+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If MouseHit (1)And my=>328 And my=<427 And mx=>289 And mx=<470 And level=>4 Then 
+ClsColor 0,0,0
+ClearText 
+Gosub postoffice
+ElseIf MouseHit (1)And my=>328 And my=<427 And mx=>289 And mx=<470 and level<4
+ ClsColor 0,0,0
+ Text 400,300,"Post office open in level 4"
+DrawScreen
+Wait 1000
+EndIf
+If GetWord (Date(),1," ")=vanhadate+1 Then Gosub rewarde 
+If MouseHit (1)And my=>220 And my=<300 And mx=>158 And mx=<595 Then 
+ClearText 
+ClsColor 0,0,0
+Gosub factory
+EndIf 
+If MouseHit (1)And my=>408 And my=<625 And mx=>182 And mx=<280 Then 
+ClearText 
+ClsColor 0,0,0
+Gosub shop
+EndIf 
+If MouseHit (1)And my=>424 And my=<564 And mx=>755 And mx=<900 And level=>11 Then 
+ClearText 
+ClsColor 0,0,0
+Gosub boat
+ElseIf MouseHit (1)And my=>424 And my=<564 And mx=>755 And mx=<900 And level<11
+ClsColor 0,0,0
+Text 400,300,"Boat terminal open in level 11"
+DrawScreen
+ClsColor 0,0,0
+Wait 1000
+EndIf
+If MouseHit (1)And my=>403 And my=<490 And mx=>500 And mx=<681 And level=>12 Then 
+ClsColor 0,0,0
+ClearText 
+Gosub miningoffice
+ElseIf MouseHit (1)And my=>403 And my=<490 And mx=>500 And mx=<681 And level<12 Then 
+ClsColor 0,0,0
+Text 400,300,"Mining office open in level 12"
+DrawScreen
+Wait 3000
+EndIf
+If MouseHit (1)And my=>26 And my=<110 And mx=>133 And mx=<481 And level=>7 Then 
+ClearText 
+ClsColor 0,0,0
+Gosub moneyoffice
+ElseIf MouseHit (1)And my=>26 And my=<110 And mx=>133 And mx=<481 And level<7
+ClsColor 0,0,0
+Text 400,300,"Change open in level 7"
+DrawScreen
+Wait 1000
+EndIf
+If MouseHit (1)And my=>667 And my=<769 And mx=>0 And mx=<447 and level=>19 Then 
+ClearText 
+ClsColor 0,0,0
+Gosub airport
+ElseIf MouseHit (1)And my=>667 And my=<769 And mx=>0 And mx=<447 And level<19
+ClsColor 0,0,0
+Text 400,300,"Airport open in level 19"
+DrawScreen
+Wait 1000
+EndIf
+If inflight=1 Then flighttime+1
+timesave+1
+
+
+
+Forever 
+factory:
+  
+manufacturing:
+CloseInput 
+Repeat 
+  
+DrawGame 
+Text 400,12,"Factory"
+If inflight=1 Then flighttime+1
+If boatdeparture=1 Then boatcomplete+1
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+Gosub boatfm
+EndIf 
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If nappi2(12,100,"Manufacturing cars") Then Gosub mcars
+If nappi2(12,120,"Manufacturing cookies") Then Gosub mcookies
+If nappi2(12,140,"Manufacturing tables") Then Gosub mtables
+DrawScreen 
+Until nappi2(400,500,"Back")
+Gosub silmukkafloor
+mcars:
+Repeat 
+numbertobuyin$=Input ("How many cars do you buy:")
+DrawScreen 
+Until KeyHit (28) 
+numbertobuy=numbertobuyin$
+numb$=numbertobuy
+CloseInput 
+Repeat 
+ 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+costcar$=numbertobuy*50
+Text 400,100,"Are you sure you want to buy "+numb$+" cars for "+costcar$+"$?" 
+If nappi2(500,350,"Yes") Then
+ Exit 
+EndIf
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If nappi2(548,350,"No") Then 
+Gosub manufacturing
+EndIf 
+DrawScreen 
+Forever 
+If money =<50*numbertobuy Then Gosub nomoney
+costminus=50*numbertobuy
+money-costminus
+Gosub waitcar
+car+numbertobuy
+xpplus=15*numbertobuy
+xp+xpplus
+Gosub savegame
+Gosub manufacturing
+mcookies:
+Repeat 
+numbertobuyin$=Input ("How many cookies do you buy:")
+DrawScreen 
+Until KeyHit (28) 
+numbertobuy=numbertobuyin$
+numb$=numbertobuy
+ CloseInput 
+Repeat 
+ 
+DrawGame 
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 Then boatcomplete+1
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf
+If inflight=1 Then flighttime+1
+cookiecost$=3*numbertobuy
+Text 400,100,"Are you sure you want to buy "+numb$+" cookies for "+cookiecost$+"$?" 
+If nappi2(500,350,"Yes") Then
+ Exit 
+EndIf 
+If nappi2(548,350,"No") Then 
+Gosub manufacturing
+EndIf 
+DrawScreen 
+Forever 
+If money =<3*numbertobuy Then Gosub nomoney
+costminus=3*numbertobuy
+money-costminus
+Gosub waitcookie
+cookie+numbertobuy
+xpplus=5*numbertobuy
+xp+xpplus
+Gosub savegame
+Gosub manufacturing
+mtables:
+Repeat 
+numbertobuyin$=Input ("How many tables do you buy:")
+DrawScreen 
+Until KeyHit (28) 
+numbertobuy=numbertobuyin$
+numb$=numbertobuy
+
+CloseInput
+Repeat 
+ 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+tabcost$=25*numbertobuy
+Text 400,100,"Are you sure you want to buy "+numb$+" tables for "+tabcost$+"$?" 
+If nappi2(500,350,"Yes") Then
+ Exit 
+EndIf 
+If nappi2(548,350,"No") Then 
+Gosub manufacturing
+EndIf 
+DrawScreen 
+Forever 
+dig1=25*numbertobuy
+If money=<dig1 Then Gosub nomoney
+costminus=25*numbertobuy
+money-costminus
+xpplus=10*numbertobuy
+xp+xpplus
+
+Gosub waittable
+table+numbertobuy
+Gosub savegame
+Gosub manufacturing
+
+
+
+nocookies:
+Repeat 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+Text 400,12,"You not have cookies, please manufacturing cookies in factory."
+DrawScreen 
+Until nappi2(500,300,"Ok")
+Gosub silmukkafloor
+
+nomoney:
+Repeat 
+ 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+Text 400,12,"You not have money, please sell manufactures."
+DrawScreen 
+Until nappi2(500,300,"Ok")
+Gosub silmukkafloor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RemStart
+If box2(200,300,50,50,1,"bRed") Then pormestarihousetextcolor$="bRed"
+If box2(252,300,50,50,1,"bBlue") Then pormestarihousetextcolor$="bBlue"
+If box2(304,300,50,50,1,"bGreen") Then pormestarihousetextcolor$="bGreen"
+If box2(356,300,50,50,1,"bBlack") Then pormestarihousetextcolor$="bBlack"
+If box2(408,300,50,50,1,"bWhite") Then pormestarihousetextcolor$="bWhite"
+If box2(408+52,300,50,50,1,"bYellow") Then pormestarihousetextcolor$="bYellow"
+If box2(408+104,300,50,50,1,"bPurple") Then pormestarihousetextcolor$="bPurple"
+If box2(460+104,300,50,50,1,"bOrange") Then pormestarihousetextcolor$="bPink"
+RemEnd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+shop:
+   
+sellshop:
+Repeat 
+ 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+Text 400,12,"Shop"
+If nappi2(12,100,"Sell cars") Then Gosub scars
+If nappi2(12,120,"Sell cookies") Then Gosub scookies
+If nappi2(12,140,"Sell tables") Then Gosub stables
+DrawScreen 
+
+    
+If nappi2(400,500,"Back") Then Gosub silmukkafloor
+Forever
+
+
+
+
+scookies:
+sellcookienumber=Rand (1,cookie)
+cookieprise=sellcookienumber*Rand (2,4)
+If Rand (1,2)=1 Then buyname$="Sarah" Else buyname$="Oscar"
+Repeat 
+ 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+Text 400,100,"Do you sell "+sellcookienumber+" cookies to "+buyname$+" for "+cookieprise+ "$ ?" 
+If nappi2(500,350,"Yes") Then Exit 
+If nappi2(548,350,"No") Then Gosub sellshop
+DrawScreen 
+Forever 
+
+If cookie=0 Then Gosub nocookies
+cookie-sellcookienumber
+money+cookieprise 
+xp+5
+Gosub sellshop
+stables:
+selltablenumber=Rand (1,table)
+tableprise=selltablenumber*Rand (24,26)
+If Rand (1,2)=1 Then buynamet$="Sarah" Else buynamet$="Oscar"
+Repeat 
+ 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+Text 400,100,"Do you sell "+selltablenumber+" tables to "+buynamet$+" for "+tableprise+ "$ ?" 
+If nappi2(500,350,"Yes") Then Exit 
+If nappi2(548,350,"No") Then Gosub sellshop
+DrawScreen 
+Forever 
+
+If table=0 Then Gosub notables
+table-selltablenumber
+money+tableprise 
+xp+15
+Gosub sellshop
+scars:
+sellcarnumber=Rand (1,car)
+carprise=sellcarnumber*Rand (49,51)
+If Rand (1,2)=1 Then buyname$="Sarah" Else buyname$="Oscar"
+Repeat 
+ 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=playsound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+Text 400,100,"Do you sell "+sellcarnumber+" cars to "+buyname$+" for "+carprise+ "$ ?" 
+If nappi2(500,350,"Yes") Then Exit 
+If nappi2(548,350,"No") Then Gosub sellshop
+DrawScreen 
+Forever 
+
+If car=0 Then Gosub nocars
+car-sellcarnumber
+money+carprise 
+xp+25
+Gosub sellshop
+nocars:
+    Repeat 
+     
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If not SoundPlaying (music)=1 Then music=playsound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+    Text 400,12,"You not have cars, please manufacturing cars in fcatory."
+    DrawScreen 
+    Until nappi2(500,300,"Ok")
+    Gosub silmukkafloor
+    notables:
+    Repeat 
+    
+If boatdeparture=1 Then boatcomplete+1
+If not SoundPlaying (music)=1 Then music=playsound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+    Text 400,12,"You not have tables, please manufacturing tables in factory."
+    DrawScreen 
+    Until nappi2(500,300,"Ok")
+    Gosub silmukkafloor
+
+
+
+boat:
+  
+DrawScreen 
+boatnodelete:
+boattto$="Please select boat departure arrival"
+
+If boatcomplete=>10000 And boatdeparture=1 Then 
+boatfinish=1
+Gosub boatfinish
+EndIf 
+If inflight=1 Then flighttime+1
+If boatdeparture=1 And boatfinish=0 Then
+Repeat 
+Text 0,0,"Boat departure is not finished please wait..."
+If nappi2(400,200,"Back") Then Gosub silmukkafloor
+boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatcomplete=>10000 Then 
+boatcomplete=0
+Gosub boatfinish
+EndIf 
+DrawScreen 
+Forever 
+EndIf 
+ 
+boatsend: 
+boatto$="Please select boat departure arrival"
+Repeat 
+ 
+DrawGame 
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+Text 10,12,"send boat to "+boatto$+" for 50$ and 10 passengers?"
+If inflight=1 Then flighttime+1
+If boatdeparture=1 Then boatcomplete+1
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+Gosub boatfm
+EndIf 
+Text 400,228+32,"Select boat departure arrival."
+If nappi2(500,228+64,"Paris") Then 
+boatto$="Paris"
+EndIf 
+If nappi2(500,260+64,"New York") Then 
+boatto$="New York"
+EndIf 
+If nappi2(500,260+96,"Tokyo") Then 
+boatto$="Tokyo"
+EndIf 
+If nappi2(500,260+128,"Shanghai") Then 
+boatto="Shanghai"
+EndIf 
+If nappi2(500,388+32,"Los angeles") Then 
+boatto$="Los angeles"
+EndIf 
+If nappi2(500,388+64,"Reset") Then 
+boatto$="Please select boat departure arrival"
+selectedboatto=0
+EndIf  
+If nappi2(523,500,"No") Then Gosub silmukkafloor
+If Not  boatto$="Please select boat departure destination" And   boatfrom$="Please select boat departure arrival" Then 
+If nappi2(485,500,"Yes") Then Gosub boatsended 
+EndIf 
+DrawScreen 
+Forever 
+boatsended:
+
+
+Wait 1
+If money=<99 Then Gosub nomoney
+If money=<9 Then Gosub nopas
+money-50
+passenger-10
+boatfinish=0
+boatdeparture=1
+boatcomplete=1
+boatmovednumber=0
+boatsendedtimes+1
+Gosub silmukkafloor
+boatfinish:
+boatdeparture=0
+boatfinish=0
+tickets+3
+xp+100
+Repeat 
+ 
+DrawGame 
+Text 0,0,"Boat departure is finish! You reward 3 tickets!"
+If timesave=100 Then Gosub savegame : timesave=0
+If nappi2(400,200,"Ok") Then Gosub boatsend
+DrawScreen 
+Forever 
+
+
+
+
+
+moneyoffice:
+  
+Repeat 
+ 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=playsound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+Text 400,12,"Money office."
+Text 400,24,"Convert tickets to money"
+If nappi2(400,200,"Convert 1 ticket to 30$") Then 
+If tickets=<1 Then Gosub notickets
+tickets-1
+money+30
+xp+10
+
+EndIf 
+
+ 
+If nappi2(400,224,"Convert 2 tickets to 63$") Then 
+If tickets=<2 Then Gosub notickets
+tickets-2
+money+63
+xp+40
+EndIf 
+If nappi2(400,248,"Convert 3 tickets to 97$") Then 
+If tickets=<3 Then Gosub notickets
+
+tickets-3
+money+97
+xp+70
+EndIf
+If nappi2(400,272,"Convert 5 tickets to 162$") Then 
+If tickets=<5 Then Gosub notickets
+tickets-5
+money+162
+xp+100
+EndIf
+If nappi2(495,96,"Back") Then 
+Gosub silmukkafloor
+EndIf
+DrawScreen 
+Forever 
+
+
+
+
+notickets:
+Repeat 
+ 
+DrawGame 
+    Text 400,12,"You not have tickets, please send boat."
+    
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=playsound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+
+EndIf 
+If inflight=1 Then flighttime+1
+    DrawScreen 
+    Until nappi2(500,300,"Ok")
+    Gosub silmukkafloor
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    boatfm:
+
+Return 
+
+
+
+
+
+
+airport:
+selectedflightto=0
+  
+airportno: 
+
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=playsound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+selectedflightto=0
+If flighttime=>99999 And inflight=1 Then Gosub airportcollect
+If flighttime=<99999 And inflight=1 Then Gosub airportnofinish
+sendflight:
+selctedflightto=0
+flightto$="Please select flight target."
+Repeat 
+ 
+DrawGame 
+Text 400,12,"send flight to "+flightto$+" for 3 tickets?"
+ 
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=playsound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+Text 400,48,"Select flight target."
+If nappi2(500,100,"Paris") Then 
+flightto$="Paris"
+selectedflightto=1
+EndIf 
+If nappi2(500,132,"New York") Then 
+flightto$="New York"
+selectedflightto=1
+EndIf 
+If nappi2(500,164,"Tokyo") Then 
+flightto$="Tokyo"
+selectedflightto=1
+EndIf 
+If nappi2(500,196,"Shanghai") Then 
+flightto$="Shanghai"
+selectedflightto=1
+EndIf 
+If nappi2(500,228,"Los angeles") Then 
+flightto$="Los angeles"
+selectedflightto=1
+EndIf 
+If nappi2(500,228+32,"Reset") Then 
+flightto$="Please select flight."
+selectedflightto=0
+EndIf 
+If nappi2(523,500,"No") Then Gosub silmukkafloor
+If selectedflightto=1 Then 
+If nappi2(485,500,"Yes") Then Gosub flightsended
+ 
+EndIf  
+ 
+DrawScreen 
+Forever 
+flightsended:
+
+
+Wait 1
+If tickets=<3 Then Gosub notickets
+tickets-3
+inflight=1
+flighttime=1
+Gosub silmukkafloor
+
+
+
+
+
+
+
+
+
+airportcollect:
+Repeat 
+ 
+DrawGame 
+Text 400,200,"Flight is finished you reward: 36 passengers and 20$."
+
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+Gosub boatfm
+EndIf 
+passenger+36
+money+20
+xp+150
+flighttime=0
+inflight=0
+If nappi2(450,400,"Ok") Then Gosub sendflight
+Forever
+
+airportnofinish:
+Repeat 
+ 
+DrawGame 
+If inflight=1 Then flighttime+1
+If boatdeparture=1 Then boatcomplete+1
+If Not soundplaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+Gosub boatfm
+EndIf 
+Text 400,200,"Flight not finished please wait..."
+If flighttime=>99999 And inflight=1 Then Gosub airportcollect
+If inflight=1 Then flighttime+1
+If nappi2(400,400,"Back") Then Gosub silmukkafloor
+DrawScreen 
+Forever 
+
+
+
+
+
+
+
+
+pormestarintalo:
+  
+pormestarinode:
+
+If portim>10000 And reward=0 Then Gosub reward
+If reward=1 Then Gosub maksa100
+If portim<10000 Then Gosub waitingportim
+maksa100:
+Repeat 
+Text 400,100,"Liver 100$ and get the prize when it is gathered ."
+If nappi2(200,450,"Liver") Then 
+Gosub livered
+EndIf 
+
+If nappi2(200,550,"Back")Then Gosub silmukkafloor
+DrawScreen 
+Forever 
+
+reward:
+
+Repeat 
+Text 400,100,"You reward "+rewardis$
+reward=1
+If nappi2(500,200,"Ok") Then Gosub pormestarinode
+DrawScreen 
+Forever 
+cityhouse:
+  
+nodecityhouse:
+Repeat 
+Text 300,100,"You are the mayor of the city."
+If nappi2(450,200,"Paint City house.") Then Gosub paintcityhouse
+DrawScreen 
+If nappi2(450,250,"Back") Then Gosub silmukkafloor
+Forever 
+
+
+paintcityhouse:
+DrawScreen 
+Text 450,100,"Sorry paint City house not avaible."
+DrawScreen  
+Wait 1000
+Gosub nodecityhouse
+
+
+
+
+
+valikko:
+   
+nodevalikko:
+Repeat 
+ 
+DrawGame 
+If nappi2(500,100,"Bug report") Then Execute "mailto:citybugreport@hotmail.com"
+If nappi2(500,100+TextHeight("Bug Report")+10,"About") Then Gosub aboutgame
+DrawScreen 
+Until nappi2(500,150,"Back")
+Return  
+
+
+
+livered:
+If money=<99 Then Gosub nomoney
+money-100
+portim=1
+reward=0
+ClearMouse 
+Gosub pormestarinode
+
+
+waitingportim:
+Repeat 
+Text 200,400,"Reward is not gathered. Please wait"
+DrawScreen 
+portim+1
+Until nappi2(500,300,"Back")
+Gosub silmukkafloor
+
+
+
+postoffice:
+   
+nodepost:
+Repeat 
+ 
+DrawGame 
+If postnum=0 Then 
+Repeat
+Text 400,200,"No post."
+If nappi2(500,300,"Back") Then Gosub silmukkafloor
+DrawScreen 
+Forever 
+EndIf 
+If npcp=0 And GetWord (Time(), 1,":")>0 And GetWord (Time(), 2,":")>0 And GetWord (Time(), 2,":")<1 Then 
+post$="Hello, good morning. You will receive a secret prize in the morning."
+postline2$="Only in the morning wake up so early. The prize is 100$."
+postnum=1
+EndIf 
+If post4taskpost=1 Then 
+post$="Hello. You reached to level 4 and you receive this gift: 3 tables."
+postline2$="You completed task! See the task in task menu!"
+postnum=2
+EndIf 
+ If Not postnum=0 Then Exit  
+DrawScreen 
+Forever 
+If GetWord (Time(), 1,":")=8 And GetWord (Time(), 2,":")=11 And GetWord (Time(), 3,":")=00 Then nocp=0
+If npcp=0 And GetWord (Time(), 1,":")>0 And GetWord (Time(), 2,":")>00 And GetWord (Time(), 2,":")<10  Then 
+xp+100
+rewardnum=Rand (1,8)
+If rewardnum=1 Then 
+rewardis$="Ticket"
+tickets+1
+EndIf 
+If rewardnum=1 Then 
+rewardis$="Cookie"
+cookie+1
+EndIf 
+If rewardnum=2 Then 
+rewardis$="Car"
+car+1
+EndIf 
+If rewardnum=3 Then 
+rewardis$="Table"
+table+1
+EndIf 
+If rewardnum=4 Then 
+rewardis$="300$"
+money+300
+EndIf
+If rewardnum=5 Then 
+rewardis$="100$"
+money+100
+EndIf
+If rewardnum=6 Then 
+rewardis$="100$"
+money+100
+EndIf
+If rewardnum=7 Then 
+rewardis$="100$"
+money+100
+EndIf
+If rewardnum=8 Then 
+rewardis$="1000$"
+money+1000
+EndIf
+post$="Hello, good morning. You will receive a secret prize in the morning."
+postline2$="Only in the morning wake up so early. The prize is "+rewardis$+"."
+postnum=1
+EndIf  
+If postnum=1 Then 
+Repeat 
+ 
+DrawGame 
+Text 200,100,post$
+Text 200,120,postline2$
+DrawScreen 
+If nappi2(500,200,"Collect prize") Then 
+npcp=1
+money+100
+If postnum=1 Then postnum=0
+EndIf 
+Until postnum=0 Or postnum=2
+If postnum=2 Then
+table+3
+Repeat 
+Text 200,100,post$
+Text 200,120,postline2$
+DrawScreen 
+post4taskpostreceived=1
+post4taskpost=0
+Until nappi2(200,200,"Ok")
+EndIf 
+DrawScreen 
+postnum=0 
+EndIf 
+DrawScreen 
+DrawScreen
+
+
+saveexit:
+
+If timesave=>100 Then Gosub savegame : timesave=0
+Gosub user1games 
+error:
+MakeError "Memory acces violation."
+
+
+RemStart
+If inflight=1 Then flighttime+1
+If boatdeparture=1 Then boatcomplete+1
+RemEnd
+savegame:
+Decrypt ls$+"game.dat", ls$+"game.ini", "1224351234251332153241265343251537356246523165437825983526534265437253724357538354764232765287r3564765387287687347389627385652676538762871675321876275273725372538725387253871583725871587358273518723587538725387158725387875387258735287517527352851872538725387523725378275172357288172537251875827358734534986532587326587581fiudfishuudidoiwydy7edyiu7w37eyd8wduyheu8wiu2eidewjudu7hyf7yh8u8dehuehyueshfdwu7yfhe87efhyce7s6e8ufeg76gsdygfdfegyudgysfiuudigseou7f87e87w87wg7683gyeudfyeyuwiweydveywieywvdeufrtrwyw2773527w7twe6e2e626e7526eef62"
+If Not FileExists (ls$+"game.ini") Or FileExists (ls$+"game.dat")  Then Goto notgameini
+DeleteFile ls$+"game.ini"
+notgameini:
+f=OpenToWrite  (ls$+"game.ini")
+WriteLine f,cookie+":"+money+":"+tickets+":"+car+":"+table+":"+passenger+":"+npcp+":"+boatdeparture+":"+boatcomplete+":"+inflight+":"+flighttime+":"+vanhadate+":"+keta1cotime+":"+xp+":"+level+":"+xpnew+":"+level1task1comp+":"+level4task1comp+":"+boatsendedtimes+":"+level11task1comp+":"+ntnt+":"+dia+":"+sil+":"+gol
+CloseFile f
+Encrypt ls$+"game.ini", ls$+"game.dat", "1224351234251332153241265343251537356246523165437825983526534265437253724357538354764232765287r3564765387287687347389627385652676538762871675321876275273725372538725387253871583725871587358273518723587538725387158725387875387258735287517527352851872538725387523725378275172357288172537251875827358734534986532587326587581fiudfishuudidoiwydy7edyiu7w37eyd8wduyheu8wiu2eidewjudu7hyf7yh8u8dehuehyueshfdwu7yfhe87efhyce7s6e8ufeg76gsdygfdfegyudgysfiuudigseou7f87e87w87wg7683gyeudfyeyuwiweydveywieywvdeufrtrwyw2773527w7twe6e2e626e7526eef62"
+DeleteFile (ls$+"game.ini")
+Return 
+loadgame:
+If Not FileExists (ls$+"game.dat") Then
+MakeError "Memory acces violation."
+EndIf 
+Decrypt ls$+"game.dat", ls$+"game.ini", "1224351234251332153241265343251537356246523165437825983526534265437253724357538354764232765287r3564765387287687347389627385652676538762871675321876275273725372538725387253871583725871587358273518723587538725387158725387875387258735287517527352851872538725387523725378275172357288172537251875827358734534986532587326587581fiudfishuudidoiwydy7edyiu7w37eyd8wduyheu8wiu2eidewjudu7hyf7yh8u8dehuehyueshfdwu7yfhe87efhyce7s6e8ufeg76gsdygfdfegyudgysfiuudigseou7f87e87w87wg7683gyeudfyeyuwiweydveywieywvdeufrtrwyw2773527w7twe6e2e626e7526eef62"
+
+f=OpenToRead (ls$+"game.ini")
+tilanneteksti$=ReadLine (f)
+cookie=GetWord (tilanneteksti$, 1 ,":")
+money=GetWord (tilanneteksti$, 2  ,":")
+tickets=GetWord (tilanneteksti$, 3,":")
+car=GetWord (tilanneteksti$, 4 ,":")
+table=GetWord (tilanneteksti$, 5 ,":")
+passenger=GetWord (tilanneteksti$, 6 ,":")
+npcp=GetWord (tilanneteksti$, 7 ,":")
+boatdeparture=GetWord (tilanneteksti$, 8 ,":")
+boatcomplete=GetWord (tilanneteksti$, 9,":")
+inflight=GetWord (tilanneteksti$, 10 ,":")
+flighttime=GetWord (tilanneteksti$, 11,":")
+vanhadate=GetWord (tilanneteksti$, 12,":")
+keta1cotime=GetWord (tilanneteksti$, 13,":")
+xp=GetWord (tilanneteksti$, 14,":")
+level=GetWord (tilanneteksti$, 15,":")
+xpnew=GetWord (tilanneteksti$, 16,":")
+level1task1comp=GetWord (tilanneteksti$, 17,":")
+level4task1comp=GetWord (tilanneteksti$, 18,":")
+boatsendedtimes=GetWord (tilanneteksti$, 19,":")
+level11task1comp=GetWord (tilanneteksti$, 20,":")
+ntnt=GetWord (tilanneteksti$, 21,":")
+dia=GetWord (tilanneteksti$, 22,":")
+sil=GetWord (tilanneteksti$, 23,":")
+gol=GetWord (tilanneteksti$, 24,":")
+CloseFile f
+Encrypt ls$+"game.ini", ls$+"game.dat", "1224351234251332153241265343251537356246523165437825983526534265437253724357538354764232765287r3564765387287687347389627385652676538762871675321876275273725372538725387253871583725871587358273518723587538725387158725387875387258735287517527352851872538725387523725378275172357288172537251875827358734534986532587326587581fiudfishuudidoiwydy7edyiu7w37eyd8wduyheu8wiu2eidewjudu7hyf7yh8u8dehuehyueshfdwu7yfhe87efhyce7s6e8ufeg76gsdygfdfegyudgysfiuudigseou7f87e87w87wg7683gyeudfyeyuwiweydveywieywvdeufrtrwyw2773527w7twe6e2e626e7526eef62"
+DeleteFile ls$+"game.ini"
+Return  
+
+
+
+nopas:
+ 
+DrawGame 
+Text 500,500,"No passengers"
+DrawScreen 
+Wait 100
+Gosub silmukkafloor
+rewarde:
+ 
+DrawGame 
+vanhadate=GetWord (Date(),1, " ")
+Repeat
+Text 512,200,"This day reward is 50$." 
+If nappi2(512-TextWidth ("Collect this day reward.")/2,769/2,"Collect this day reward.") Then 
+money+50
+Return
+EndIf 
+DrawScreen
+Forever 
+
+
+
+
+back2flo:
+ClearMouse 
+back2noflo:
+Repeat
+timetoup+1
+If timetoup=>1000 Then Gosub savegame : timetoup=0
+
+ClsColor 0,255,0
+my=MouseY()
+mx=MouseX()
+
+DrawImage background2,0,0
+DrawGame 
+
+If kuvanappi(10,5,valikkonappi) Then Gosub nodevalikko
+If kuvanappi(10+ImageWidth(valikkonappi) ,5,suljenappi) Then Gosub saveexit
+If kuvanappi(10,5+ImageHeight(valikkonappi),gomap) Then
+Wait 200
+ Goto silmukkafloor
+EndIf 
+keta1cotime+1
+If MouseHit (1)And my=>12 And my=<105 And mx=>281 And mx=<480 And level=>16 Then 
+ClearText 
+ClsColor 0,0,0
+Gosub laboratory
+ElseIf MouseHit (1)And my=>12 And my=<105 And mx=>281 And mx=<480 And level<16
+ClsColor 0,0,0
+Text 400,300,"Laborato ry home sales open in level 16"
+DrawScreen
+Wait 1000
+EndIf
+If MouseHit (1)And my=>159 And my=<190 And mx=>650 And mx=<792 And keta1cotime=>9999 Then 
+ClearText 
+keta1cotime=0
+money+100
+Else 
+If MouseHit (1)And my=>159 And my=<190 And mx=>650 And mx=<792 And keta1cotime=<9999 Then 
+DrawGame 
+ClsColor 0,0,0
+Text 400,300,"Collection time is not yet..."
+DrawScreen 
+Wait 1000
+EndIf 
+EndIf 
+Gosub xpup
+timesave+1
+DrawScreen 
+Forever 
+waitcar:
+
+cartime=0
+Repeat
+ 
+DrawGame 
+If cartime>1000 Then Return
+Box 10,10,1000,10,0
+Box 10,10,cartime,10,1
+cartime+1
+DrawScreen
+ 
+Forever
+waitcookie:
+cootime=0
+Repeat
+ 
+DrawGame 
+If cootime>1000 Then Return
+Box 10,10,1000,10,0
+Box 10,10,cootime,10,1
+cootime+1
+DrawScreen
+ 
+Forever 
+waittable:
+
+tabtime=0
+Repeat
+ 
+DrawGame 
+If tabtime>1000 Then Return
+Box 10,10,1000,10,0
+Box 10,10,tabtime,10,1
+tabtime+1
+DrawScreen 
+Forever 
+xpup:
+DrawGame
+DrawImage xpbox,1024/2-200,5 
+DrawImage  xpim, 1024/2-150,5
+DrawGame 
+Text 1024/2-200+ImageWidth (xpbox)/2-3,5+ImageHeight (xpbox)/2-7,level
+Text 1024/2,15/2,xp+"/"+xpnew 
+If xp=>xpnew Then
+xp-xpnew 
+xpnew=xpnew+20*level-level/2
+level+1
+EndIf 
+Return 
+tasks: 
+If level=>1  And level<4 Then Gosub level1
+If level=>4  And level<11 Then Gosub level4 
+If level=>11 Then Gosub level11
+Return  
+level1:  
+Repeat 
+ 
+DrawGame 
+Box 12,10,1002,50,0
+Text 20,20,"Cookies collecting!"
+Text 20,40,"Collect 15 cookies. Reward 25$ and one ticket."
+If cookie =>15 And level1task1comp=0 Then
+If nappi2(950,30,"Collect reward") Then money+25 : ticket+1 : level1task1comp=1  
+EndIf 
+DrawScreen 
+If nappi2(925,680,"Back to city") Then Gosub  silmukkafloor
+Forever 
+level4:
+If Not post4taskpostreceived=1 Then 
+post4taskpost=1
+EndIf 
+ Repeat 
+  
+DrawGame 
+Box 12,10,1002,50,0
+Text 20,20,"Post!"
+Text 20,40,"Receive a post from post office. Reward 15$."
+If level4taskpostreceived=1 Then
+If nappi2(950,30,"Collect reward") Then money+15 :  level4task1comp=1  
+EndIf 
+DrawScreen 
+If nappi2(830,680,"Back to city") Then Gosub  silmukkafloor
+Forever
+level11:   
+Repeat
+ 
+DrawGame 
+If Not level11task1comp=1 Then  
+Repeat 
+ 
+DrawGame 
+Box 12,10,1002,50,0
+Text 20,20,"Boat!"
+Text 20,40,"Send boat 3 times. Reward 200$ and a table"
+If boatsendedtimes=>3 Then
+If nappi2(950,30,"Collect reward") Then money+200 : table+1 : level11task1comp=1  
+EndIf 
+
+DrawScreen
+If nappi2(830,680,"Back to city") Then Gosub  silmukkafloor
+
+Forever  
+EndIf 
+If nappi2(830,680,"Back to city") Then Gosub  silmukkafloor
+DrawScreen 
+Forever
+remstart 
+moneyoffice7
+postofiice4
+boat11
+airport19
+remend
+miningoffice:
+Repeat 
+If nappi2(10,300,"Sell minerals.") Then Gosub sellminerals
+If miner=1 Then Text 100,20,"You hired 1 miner." Else Text 100,20,"You hired "+miner+" miners."
+If miner=1 Then ntnt=2000
+If miner>0 Then ntnt=2000/miner 
+If nappi2(300,300,"Hire a miner for 100$ and one ticket.") Then 
+If money=<100 Then Gosub nomoney
+If tickets<1 Then Gosub notickets
+tickets-1
+money-100
+miner+1
+Gosub savegame 
+EndIf 
+If miner=>1 Then
+If nappi2(500,400,"Goto mine.") Then Gosub mine
+EndIf  
+DrawScreen 
+Forever 
+mine:
+Repeat 
+newtnt+1
+If newtnt=>ntnt Then
+tntrand=Rand(1,3)
+If tntrand=1 Then sil+1
+If tntrand=2 Then gol+1
+If tntrand=3 Then dia+1
+newtnt=0
+Gosub savegame
+EndIf 
+
+DrawImage minemap ,0,0
+DrawGame
+Box 0,600,1024,768-600,0
+Text 20,620,"Mined minerals:"
+Text 20,640,"Silver:"+sil
+Text 20,660,"Diamond:"+dia
+Text 20,680,"Gold:"+gol 
+If nappi2(300,700,"Back to up") Then exitmine=1
+DrawScreen 
+Until exitmine=1
+exitmine=0
+
+Repeat 
+newtnt+1
+If newtnt=>ntnt Then
+tntrand=Rand(1,3)
+If tntrand=1 Then sil+1
+If tntrand=2 Then gol+1
+If tntrand=3 Then dia+1
+newtnt=0
+Gosub savegame
+EndIf 
+Box 1024/2-100,768/2-50,200,100,0
+CenterText 1024/2,768/2,"Are you sure? The mine close when you go back to city!"
+DrawScreen 
+If nappi2(800,100,"Cancel") Then Gosub mine
+Until nappi2 (100,100,"Go to city")
+Gosub silmukkafloor
+sellminerals:
+Repeat 
+Box 0,600,1024,768-600,0
+Text 20,620,"Mined minerals:"
+Text 20,640,"Silver:"+sil
+Text 20,660,"Diamond:"+dia
+Text 20,680,"Gold:"+gol 
+If nappi2(100,40,"Sell silver") Then 
+Repeat
+DrawScreen 
+Box 0,600,1024,768-600,0
+Text 20,620,"Mined minerals:"
+Text 20,640,"Silver:"+sil
+Text 20,660,"Diamond:"+dia
+Text 20,680,"Gold:"+gol 
+ Text 20,680,"Enter 0 to go back to mining office."
+Locate 200,400
+sellnum=Input ("How many mineral's do you sell? Enter number here:")
+  If nappi2(800,400,"Sell mineral's") Then 
+CloseInput
+If sil<sellnum Then Gosub nomine
+sil=sil-sellnum
+
+Gosub savegame
+Gosub miningoffice
+EndIf 
+Forever 
+EndIf 
+If nappi2(100,60,"Sell gold") Then 
+Repeat
+DrawScreen 
+Box 0,600,1024,768-600,0
+Text 20,620,"Mined minerals:"
+Text 20,640,"Silver:"+sil
+Text 20,660,"Diamond:"+dia
+Text 20,680,"Gold:"+gol 
+ Text 20,680,"Enter 0 to go back to mining office."
+Locate 200,400
+sellnum=Input ("How many minerals's do you sell? Enter number here:")
+If nappi2(800,400,"Sell minerals's") Then
+CloseInput 
+If gol<sellnum Then Gosub nomine
+gol=gol-sellnum
+Gosub savegame
+Gosub miningoffice
+EndIf 
+Forever 
+EndIf 
+
+If nappi2(100,80,"Sell diamonds") Then 
+Repeat
+DrawScreen 
+Box 0,600,1024,768-600,0
+Text 20,620,"Mined minerals:"
+Text 20,640,"Silver:"+sil
+Text 20,660,"Diamond:"+dia
+Text 20,680,"Gold:"+gol 
+ Text 20,680,"Enter 0 to go back to mining office."
+Locate 200,400
+sellnum=Input ("How many mineral's do you sell? Enter number here:")
+  If nappi2(800,400,"Sell mineral's") Then 
+CloseInput
+If dia<sellnum Then Gosub nomine
+dia=dia-sellnum
+
+Gosub savegame
+Gosub miningoffice
+EndIf 
+Forever 
+EndIf 
+DrawScreen 
+Forever 
+nomine: 
+Text 400,300,"Not mineral's please mine more mineral's"
+DrawScreen
+Wait 1000
+Goto miningoffice
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+laboratory:
+Repeat 
+Text 200,100,"Welcome to laborato ry home sales."
+If nappi2 (120,30,"Buy houses") Then Gosub homeshop
+If nappi2 (120,70,"Sell houses") Then Gosub homesell
+If nappi2 (120,300,"Back") Then Gosub back2noflo
+DrawScreen 
+Forever 
+homeshop:
+Text 512,360,"Checking houses price please wait..."
+DrawScreen 
+Wait Rand (100,10000)
+homeprice=Rand (1200,10000)
+Repeat 
+ If nappi2(512,400,"Back") Then Goto laboratory
+DrawGame 
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 Then boatcomplete+1
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf
+If inflight=1 Then flighttime+1
+Text 400,100,"Do you want to buy one house for "+homeprice+"$?" 
+If nappi2(500,350,"Yes") Then
+ Exit 
+EndIf 
+If nappi2(548,350,"No") Then 
+Return 
+EndIf 
+DrawScreen 
+Forever 
+If money > homeprice Then Gosub nomoney
+
+money-homeprice
+home+1
+
+xp+100
+Gosub homeshop
+homesell:
+Text 512,360,"Checking houses price please wait..."
+DrawScreen 
+Wait Rand (100,10000)
+homeprice=Rand (1200,10000)
+Repeat 
+ If nappi2(512,400,"Back") Then Goto laboratory
+DrawGame 
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 Then boatcomplete+1
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf
+If inflight=1 Then flighttime+1
+Text 400,100,"Do you want to sell one house and you get "+homeprice+"$?" 
+If nappi2(500,350,"Yes") Then
+ Exit 
+EndIf 
+If nappi2(548,350,"No") Then 
+Gosub manufacturing
+EndIf 
+DrawScreen 
+Forever 
+If  home<1 Then Gosub nohouse
+
+money+homeprice
+home-1
+
+xp+50
+Gosub homesell
+nohouse:
+Repeat 
+DrawGame 
+If boatdeparture=1 Then boatcomplete+1
+If Not SoundPlaying (music)=1 Then music=PlaySound (ls$+"game_08.XM",50) 
+If boatdeparture=1 And boatcomplete=>10000 Then 
+boatmovednumber=1
+EndIf 
+If inflight=1 Then flighttime+1
+Text 400,12,"You not have houses, please buy houses in laborato ry."
+DrawScreen 
+Until nappi2(500,300,"Ok")
+Return 
+police:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aboutgame:
+DrawScreen 
+aboutgamex=400
+aboutgamey=1100
+Repeat
+DrawScreen 
+For aboutgam = 0 To 1200
+If aboutgamey=<-100 Then aboutgamey=1100
+aboutgamey-3
+Text aboutgamex, aboutgamey-11*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Version:"+versioncode$
+Text aboutgamex, aboutgamey-10*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Created by:"
+Text aboutgamex, aboutgamey-9*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Jugames!"
+Text aboutgamex, aboutgamey-8*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Program used to coding:"
+Text aboutgamex, aboutgamey-7*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Coolbasic"
+Text aboutgamex, aboutgamey-6*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Thanks to:"
+Text aboutgamex, aboutgamey-5*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Jugames "+CHR(22)+"staff"+CHR(22)+":"
+Text aboutgamex, aboutgamey-4*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Lead developer:"
+Text aboutgamex, aboutgamey-3*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Juuso"
+Text aboutgamex, aboutgamey-2*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Made in:"
+Text aboutgamex, aboutgamey-1*TextHeight("QWERTYUIOPASDFGHJKLÖÄZXCVBNM"),"Finland"
+Text aboutgamex, aboutgamey,"Thanks for playing!"
+If nappi2(900,700,"Back") Then Return 
+DrawScreen 
+Next aboutgam
+Forever 
+

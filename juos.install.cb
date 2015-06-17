@@ -1,0 +1,47 @@
+REMSTART
+    .iii.   usola
+    .iii.
+    .iii.
+    .iii.
+    .iii.
+    .iii.
+    .iii.
+   .ii.   
+.iiii.
+    
+    Project Info:
+    Name: JuOs installer
+    Idea: installer of JuOs
+    Creator: Juuso Laine
+    REMEND
+    SCREEN 500,350
+lsnumber=Len (GetEXEName ())-Len ("JuOs setup.exe")
+    ls$=Left (GetEXEName(), lsnumber)
+    ChDir ls$
+ClsColor cbwhite 
+Color cbblack
+DrawScreen 
+Print "This work is licensed under the Creative Commons"
+Print "Attribution-NonCommercial-ShareAlike 4.0 International"
+Print "License. To view a copy of this license, visit"
+Print "http://creativecommons.org/licenses/by-nc-sa/4.0/."
+Print "Hold g to open shortcut of the link"
+Print "Press any key to continue"
+WaitKey 
+If KeyDown(cbkeyg) Then Execute "http://creativecommons.org/licenses/by-nc-sa/4.0/":Print "Press any key": WaitKey 
+Repeat
+If Timer()>record+1000 Then record=Timer():timetogo+1
+If timetogo=60 Then Exit
+If KeyDown (cbkeyy) Then Exit
+If KeyDown (cbkeyn) Then End 
+Print  "This will install JuOs, hold y to continue install."
+Print "To cancel install press n, JuOs will be automatically installed in 60 seconds."
+DrawScreen 
+Forever 
+CopyFile "Files/pub/JuOs.exe", "JuOs.exe"
+If FileExists ("JuOs.exe") Then 
+If FileExists ("Files/pub/JuOs.exe") Then DeleteFile "Files/pub/JuOs.exe"
+Else
+ MakeError "Failed... Please send mail to developer jusola.juossetup@outlook.com."
+EndIf
+MakeError "Done! Please launch JuOs to delete installer."+Chr(10)+Chr(13)+"Please don't move any files in directory where this installer is."+Chr(10)+Chr(13)+"Anyway you can move directory to anywhere."+Chr (10)+Chr(13)+"TITLE SAYS THIS IS ERROR, BUT THIS REALLY ISN'T."
